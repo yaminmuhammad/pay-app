@@ -1,13 +1,14 @@
 package controller
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/yaminmuhammad/pay-app/config"
 	"github.com/yaminmuhammad/pay-app/entity"
 	"github.com/yaminmuhammad/pay-app/handler/middleware"
 	"github.com/yaminmuhammad/pay-app/shared/common"
 	"github.com/yaminmuhammad/pay-app/usecase"
-	"net/http"
 )
 
 type CustomerController struct {

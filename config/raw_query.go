@@ -7,4 +7,7 @@ const (
 
 	GetCustomerById = `SELECT id, username, phone, email, created_at, updated_at
 	FROM customers WHERE id = $1`
+
+	GetCustomerByEmail = `SELECT id, username, phone, email
+	FROM customers WHERE email = $1`
 )

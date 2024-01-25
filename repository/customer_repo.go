@@ -2,20 +2,42 @@ package repository
 
 import (
 	"database/sql"
+	"fmt"
+	"log"
+	"time"
+
 	"github.com/yaminmuhammad/pay-app/config"
 	"github.com/yaminmuhammad/pay-app/entity"
 	"golang.org/x/crypto/bcrypt"
-	"log"
-	"time"
 )
 
 type CustomerRepo interface {
 	Register(data entity.Customer) (entity.Customer, error)
 	Get(id string) (entity.Customer, error)
+	GetUser(email string) (entity.Customer, error)
 }
 
 type customerRepo struct {
 	db *sql.DB
+}
+
+func (c *customerRepo) GetUser(email string) (entity.Customer, error) {
+	var customer entity.Customer
+
+	err := c.db.QueryRow(config.GetCustomerByEmail, email).Scan(
+		&customer.Id,
+		&customer.Username,
+		&customer.Phone,
+		&customer.Email,
+	)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return entity.Customer{}, fmt.Errorf("customer not found with email: %s", email)
+		}
+		log.Println("customerRepository :", err.Error())
+		return entity.Customer{}, err
+	}
+	return customer, nil
 }
 
 func (c *customerRepo) Get(id string) (entity.Customer, error) {

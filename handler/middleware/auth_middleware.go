@@ -1,11 +1,12 @@
 package middleware
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/yaminmuhammad/pay-app/shared/service"
 	"log"
 	"net/http"
 	"strings"
+
+	"github.com/gin-gonic/gin"
+	"github.com/yaminmuhammad/pay-app/shared/service"
 )
 
 type AuthMiddleware interface {
