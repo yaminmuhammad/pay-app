@@ -29,6 +29,7 @@ func (c *customerRepo) GetCustomer(email string) (entity.Customer, error) {
 		&customer.Username,
 		&customer.Phone,
 		&customer.Email,
+		&customer.HashPassword,
 	)
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -61,7 +62,7 @@ func (c *customerRepo) Register(data entity.Customer) (entity.Customer, error) {
 	var customer entity.Customer
 
 	//	Hashing Password
-	password, err := bcrypt.GenerateFromPassword([]byte(data.Password), bcrypt.DefaultCost)
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(data.HashPassword), bcrypt.DefaultCost)
 
 	if err != nil {
 		log.Println("customerRepo GenerateFromPassword:", err.Error())
@@ -72,7 +73,7 @@ func (c *customerRepo) Register(data entity.Customer) (entity.Customer, error) {
 		data.Username,
 		data.Phone,
 		data.Email,
-		string(password),
+		string(hashedPassword),
 		time.Now()).Scan(
 		&customer.Id,
 		&customer.CreatedAt,

@@ -44,7 +44,7 @@ func (a *authMiddleware) RequireToken(roles string) gin.HandlerFunc {
 			return
 		}
 
-		ctx.Set("customer", claims["customerId"])
+		ctx.Set("customerId", claims["customerId"])
 
 		ctx.Next()
 	}
