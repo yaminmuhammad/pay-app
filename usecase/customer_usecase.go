@@ -38,6 +38,17 @@ func (c *customerUsecase) AuthCustomer(email string, hashPassword string) (entit
 		return entity.Customer{}, errors.New("password verification failed")
 	}
 
+	// Log login activity
+	activity := entity.Activities{
+		CustomerId:   customer.Id,
+		Activity:     "Login",
+		ActivityTime: time.Now(),
+	}
+	if err := c.repo.LogActivity(activity); err != nil {
+		log.Println("Failed to log login activity:", err)
+		// Handle the error as needed
+	}
+
 	return customer, nil
 }
 

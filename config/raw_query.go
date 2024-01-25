@@ -7,4 +7,6 @@ const (
 	FROM customers WHERE id = $1`
 
 	GetCustomerByEmail = `SELECT id, username, phone, email, hash_password FROM customers WHERE email = $1`
+
+	InsertActivity = `INSERT INTO activities (customer_id, activity, activity_time) VALUES ($1, $2, $3)`
 )

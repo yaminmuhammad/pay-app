@@ -15,10 +15,22 @@ type CustomerRepo interface {
 	Register(data entity.Customer) (entity.Customer, error)
 	Get(id string) (entity.Customer, error)
 	GetCustomer(email string) (entity.Customer, error)
+	LogActivity(activity entity.Activities) error
 }
 
 type customerRepo struct {
 	db *sql.DB
+}
+
+// LogActivity implements CustomerRepo.
+func (c *customerRepo) LogActivity(activity entity.Activities) error {
+	_, err := c.db.Exec(
+		config.InsertActivity,
+		activity.CustomerId,
+		activity.Activity,
+		activity.ActivityTime,
+	)
+	return err
 }
 
 func (c *customerRepo) GetCustomer(email string) (entity.Customer, error) {
