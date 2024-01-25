@@ -11,16 +11,34 @@ import (
 
 type CustomerRepo interface {
 	Register(data entity.Customer) (entity.Customer, error)
+	Get(id string) (entity.Customer, error)
 }
 
 type customerRepo struct {
 	db *sql.DB
 }
 
+func (c *customerRepo) Get(id string) (entity.Customer, error) {
+	var customer entity.Customer
+	err := c.db.QueryRow(config.GetCustomerById, id).Scan(
+		&customer.Id,
+		&customer.Username,
+		&customer.Phone,
+		&customer.Email,
+		&customer.CreatedAt,
+		&customer.UpdatedAt,
+	)
+	if err != nil {
+		log.Println("customerRepository.Get.QueryRow:", err.Error())
+		return entity.Customer{}, err
+	}
+	return customer, nil
+}
+
 func (c *customerRepo) Register(data entity.Customer) (entity.Customer, error) {
 	var customer entity.Customer
 
-	//	Hass Password
+	//	Hashing Password
 	password, err := bcrypt.GenerateFromPassword([]byte(data.Password), bcrypt.DefaultCost)
 
 	if err != nil {

@@ -17,7 +17,7 @@ type customerUsecase struct {
 }
 
 func (c *customerUsecase) FindCustomerByID(id string) (entity.Customer, error) {
-	return c.repo.
+	return c.repo.Get(id)
 }
 
 func (c *customerUsecase) RegisterCustomer(data entity.Customer) (entity.Customer, error) {

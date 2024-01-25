@@ -1,7 +1,7 @@
 package main
 
-import "fmt"
+import "github.com/yaminmuhammad/pay-app/handler"
 
 func main() {
-	fmt.Println()
+	handler.NewServer().Run()
 }
