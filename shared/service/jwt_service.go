@@ -40,19 +40,16 @@ func (j *jwtService) CreateToken(customer entity.Customer) (dto.AuthResponse, er
 
 func (j *jwtService) ParseToken(tokenHeader string) (jwt.MapClaims, error) {
 	token, err := jwt.Parse(tokenHeader, func(token *jwt.Token) (interface{}, error) {
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("oops, unexpected signing method: %v", token.Header["alg"])
-		}
 		return j.config.JwtSignatureKey, nil
 	})
 
 	if err != nil {
-		return nil, fmt.Errorf("oops, failed to verify token: %v", err)
+		return nil, fmt.Errorf("oops, failed to verify token")
 	}
 
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok {
-		return nil, fmt.Errorf("oops, failed to parse token claims")
+		return nil, fmt.Errorf("oops, failed to claim token")
 	}
 	return claims, nil
 }

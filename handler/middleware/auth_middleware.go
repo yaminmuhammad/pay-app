@@ -10,7 +10,7 @@ import (
 )
 
 type AuthMiddleware interface {
-	RequireToken(roles ...string) gin.HandlerFunc
+	RequireToken(roles string) gin.HandlerFunc
 }
 
 type authMiddleware struct {
@@ -21,7 +21,7 @@ type AuthHeader struct {
 	AuthorizationHeader string `header:"Authorization"`
 }
 
-func (a *authMiddleware) RequireToken(roles ...string) gin.HandlerFunc {
+func (a *authMiddleware) RequireToken(roles string) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var authHeader AuthHeader
 		if err := ctx.ShouldBindHeader(&authHeader); err != nil {
@@ -30,7 +30,7 @@ func (a *authMiddleware) RequireToken(roles ...string) gin.HandlerFunc {
 			return
 		}
 
-		tokenHeader := strings.TrimPrefix(authHeader.AuthorizationHeader, "Bearer ")
+		tokenHeader := strings.Replace(authHeader.AuthorizationHeader, "Bearer ", "", -1)
 		if tokenHeader == "" {
 			log.Println("RequireToken: Missing token")
 			ctx.AbortWithStatus(http.StatusUnauthorized)

@@ -14,14 +14,14 @@ import (
 type CustomerRepo interface {
 	Register(data entity.Customer) (entity.Customer, error)
 	Get(id string) (entity.Customer, error)
-	GetUser(email string) (entity.Customer, error)
+	GetCustomer(email string) (entity.Customer, error)
 }
 
 type customerRepo struct {
 	db *sql.DB
 }
 
-func (c *customerRepo) GetUser(email string) (entity.Customer, error) {
+func (c *customerRepo) GetCustomer(email string) (entity.Customer, error) {
 	var customer entity.Customer
 
 	err := c.db.QueryRow(config.GetCustomerByEmail, email).Scan(

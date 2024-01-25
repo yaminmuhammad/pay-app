@@ -3,11 +3,12 @@ package usecase
 import (
 	"errors"
 	"fmt"
+	"log"
+	"time"
+
 	"github.com/yaminmuhammad/pay-app/entity"
 	"github.com/yaminmuhammad/pay-app/repository"
 	"golang.org/x/crypto/bcrypt"
-	"log"
-	"time"
 )
 
 type CustomerUseCase interface {
@@ -21,10 +22,11 @@ type customerUsecase struct {
 }
 
 func (c *customerUsecase) AuthCustomer(email string, password string) (entity.Customer, error) {
-	customer, err := c.repo.GetUser(email)
+	customer, err := c.repo.GetCustomer(email)
 	if err != nil {
 		return entity.Customer{}, err
 	}
+
 	if password == "" {
 		log.Println("customerUsecase.AuthCustomer: Empty password provided")
 		return entity.Customer{}, errors.New("password required")
