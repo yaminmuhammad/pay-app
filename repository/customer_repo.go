@@ -10,14 +10,14 @@ import (
 )
 
 type CustomerRepo interface {
-	Save(data entity.Customer) (entity.Customer, error)
+	Register(data entity.Customer) (entity.Customer, error)
 }
 
 type customerRepo struct {
 	db *sql.DB
 }
 
-func (c *customerRepo) Save(data entity.Customer) (entity.Customer, error) {
+func (c *customerRepo) Register(data entity.Customer) (entity.Customer, error) {
 	var customer entity.Customer
 
 	//	Hass Password
