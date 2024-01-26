@@ -26,25 +26,35 @@ func (a *authMiddleware) RequireToken(roles string) gin.HandlerFunc {
 		var authHeader AuthHeader
 		if err := ctx.ShouldBindHeader(&authHeader); err != nil {
 			log.Printf("RequireToken: Error binding header: %v \n", err)
-			ctx.AbortWithStatus(http.StatusUnauthorized)
+			ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized: Error binding header"})
+			ctx.Abort()
 			return
 		}
 
 		tokenHeader := strings.Replace(authHeader.AuthorizationHeader, "Bearer ", "", -1)
 		if tokenHeader == "" {
 			log.Println("RequireToken: Missing token")
-			ctx.AbortWithStatus(http.StatusUnauthorized)
+			ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized: Missing token"})
+			ctx.Abort()
 			return
 		}
 
 		claims, err := a.jwtService.ParseToken(tokenHeader)
 		if err != nil {
 			log.Printf("RequireToken: Error parsing token: %v \n", err)
-			ctx.AbortWithStatus(http.StatusUnauthorized)
+			ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized: Invalid token"})
+			ctx.Abort()
 			return
 		}
 
-		ctx.Set("customerId", claims["customerId"])
+		if _, ok := claims["customerId"]; !ok {
+			log.Println("RequireToken: Missing 'customerId' claim in token")
+			ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized: Missing 'customerId' claim in token"})
+			ctx.Abort()
+			return
+		}
+
+		// a.jwtService.SaveCustomerSession(ctx, claims)
 
 		ctx.Next()
 	}

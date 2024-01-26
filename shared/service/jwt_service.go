@@ -14,11 +14,19 @@ import (
 type JwtService interface {
 	CreateToken(customer entity.Customer) (dto.AuthResponse, error)
 	ParseToken(tokenHeader string) (jwt.MapClaims, error)
+	// SaveCustomerSession(ctx *gin.Context, claims jwt.MapClaims)
 }
 
 type jwtService struct {
 	config config.TokenConfig
 }
+
+// SaveCustomerSession implements JwtService.
+// func (j *jwtService) SaveCustomerSession(ctx *gin.Context, claims jwt.MapClaims) {
+// 	session := sessions.Default(ctx)
+// 	session.Set("customerId", claims["customerId"])
+// 	session.Save()
+// }
 
 func (j *jwtService) CreateToken(customer entity.Customer) (dto.AuthResponse, error) {
 	claims := model.CustomClaims{
@@ -29,6 +37,10 @@ func (j *jwtService) CreateToken(customer entity.Customer) (dto.AuthResponse, er
 		},
 		CustomerId: customer.Id,
 	}
+
+	// session := sessions.Default(ctx)
+	// session.Set("customerId", claims.CustomerId)
+	// session.Save()
 
 	token := jwt.NewWithClaims(j.config.JwtSigningMethod, claims)
 	ss, err := token.SignedString(j.config.JwtSignatureKey)

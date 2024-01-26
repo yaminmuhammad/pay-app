@@ -49,7 +49,7 @@ func NewServer() *Server {
 	customerRepo := repository.NewCustomerRepo(db)
 	jwtService := service.NewJwtService(config.TokenConfig)
 	customerUC := usecase.NewCustomerUseCase(customerRepo)
-	authUC := usecase.NewAuthUseCase(customerUC, jwtService)
+	authUC := usecase.NewAuthUseCase(customerUC, jwtService, customerRepo)
 
 	engine := gin.Default()
 	port := fmt.Sprintf(":%s", config.ApiPort)
