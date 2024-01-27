@@ -1,0 +1,208 @@
+{
+	"info": {
+		"_postman_id": "c603ac39-9ff3-43e2-8253-fb9d83e5b05b",
+		"name": "Pay-app",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18678094"
+	},
+	"item": [
+		{
+			"name": "Register Customer",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\" : \"Angga\",\r\n    \"phone\": \"08372874999\",\r\n    \"email\" : \"angga@gmail.com\",\r\n    \"hashPassword\": \"angga\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/master/customers/",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"master",
+						"customers",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetCustomer by Id",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ5YW1pbm11aGFtbWFkIiwiZXhwIjoxNzA2MjM0Nzc4LCJpYXQiOjE3MDYyMjc1NzgsImN1c3RvbWVySWQiOiJjY2ZjNDlmMC0xY2ZhLTQ0ODUtYjYwMC1kOTQzZGQ4YTc0MzQifQ.4i93d57mQb-SnYncdFJv1dNWcS3Iro_ZLE6ljyhVQLg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/v1/master/customers/ccfc49f0-1cfa-4485-b600-d943dd8a7434",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"master",
+						"customers",
+						"ccfc49f0-1cfa-4485-b600-d943dd8a7434"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login Customer",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\" : \"angga@gmail.com\",\r\n    \"hashPassword\": \"angga\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/auth/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ5YW1pbm11aGFtbWFkIiwiZXhwIjoxNzA2MzEzMjE2LCJpYXQiOjE3MDYzMDYwMTYsImN1c3RvbWVySWQiOiJjY2ZjNDlmMC0xY2ZhLTQ0ODUtYjYwMC1kOTQzZGQ4YTc0MzQifQ.KRZ2WNSGFwDnDwXX6uRYxbw_xhu-hdALS-Y0rXTXPLY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/auth/logout",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"auth",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register Merchant",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\" : \"Sri Rejeki\",\r\n    \"phone\" : \"0821373294233\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/master/merchants/",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"master",
+						"merchants",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Transaction",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ5YW1pbm11aGFtbWFkIiwiZXhwIjoxNzA2MzQyNjUyLCJpYXQiOjE3MDYzMzU0NTIsImN1c3RvbWVySWQiOiJjY2ZjNDlmMC0xY2ZhLTQ0ODUtYjYwMC1kOTQzZGQ4YTc0MzQifQ.7U2Aw8MIhlrCiVR9tFYnyNqH_Uw6BeQwbUbYYaC2vDk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"customerId\" : \"ccfc49f0-1cfa-4485-b600-d943dd8a7434\",\r\n    \"merchantId\" : \"ddf6e5f0-4acf-4690-b618-04fdb4b1d888\",\r\n    \"product\" : \"Beras\",\r\n    \"amount\" : 30000,\r\n    \"status\": \"Process\" ,\r\n    \"code\" : \"BAA99\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/master/transactions/",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"master",
+						"transactions",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
