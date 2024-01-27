@@ -7,4 +7,6 @@ const (
 	MasterCustomerRegister = "/master/customers"
 
 	MasterMerchantRegister = "/master/merchants"
+
+	MasterTransaction = "/master/transactions"
 )

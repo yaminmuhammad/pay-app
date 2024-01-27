@@ -11,4 +11,6 @@ const (
 	GetCustomerByEmail = `SELECT id, username, phone, email, hash_password FROM customers WHERE email = $1`
 
 	InsertActivity = `INSERT INTO activities (customer_id, activity, activity_time) VALUES ($1, $2, $3)`
+
+	CreateTransaction = `INSERT INTO transactions (customer_id, merchant_id, product, amount, status, code, transaction_time) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id`
 )

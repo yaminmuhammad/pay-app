@@ -18,12 +18,13 @@ import (
 )
 
 type Server struct {
-	customerUC usecase.CustomerUseCase
-	merchantUC usecase.MerchantUseCase
-	authUC     usecase.AuthUseCase
-	jwtService service.JwtService
-	engine     *gin.Engine
-	port       string
+	customerUC    usecase.CustomerUseCase
+	merchantUC    usecase.MerchantUseCase
+	transactionUC usecase.TransactionUsecase
+	authUC        usecase.AuthUseCase
+	jwtService    service.JwtService
+	engine        *gin.Engine
+	port          string
 }
 
 func (s *Server) initRoute() {
@@ -33,6 +34,7 @@ func (s *Server) initRoute() {
 	controller.NewAuthController(s.authUC, rg).Route()
 	controller.NewCustomerController(s.customerUC, rg, authMiddleware).Route()
 	controller.NewMerchantController(s.merchantUC, rg, authMiddleware).Route()
+	controller.NewTransactionController(s.transactionUC, rg, authMiddleware).Route()
 }
 
 func (s *Server) Run() {
@@ -52,11 +54,13 @@ func NewServer() *Server {
 
 	customerRepo := repository.NewCustomerRepo(db)
 	merchantRepo := repository.NewMerchantRepo(db)
+	transactionRepo := repository.NewTransactionRepo(db)
 
 	jwtService := service.NewJwtService(config.TokenConfig)
 
 	customerUC := usecase.NewCustomerUseCase(customerRepo)
 	merchantUC := usecase.NewMerchantUseCase(merchantRepo)
+	transactionUC := usecase.NewTransactionUsecase(transactionRepo)
 
 	authUC := usecase.NewAuthUseCase(customerUC, jwtService, customerRepo)
 
@@ -68,6 +72,7 @@ func NewServer() *Server {
 	return &Server{
 		customerUC,
 		merchantUC,
+		transactionUC,
 		authUC,
 		jwtService,
 		engine,
