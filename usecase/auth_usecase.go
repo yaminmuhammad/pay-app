@@ -3,6 +3,7 @@ package usecase
 import (
 	"fmt"
 
+	"github.com/gin-gonic/gin"
 	"github.com/yaminmuhammad/pay-app/dto"
 	"github.com/yaminmuhammad/pay-app/entity"
 	"github.com/yaminmuhammad/pay-app/repository"
@@ -10,7 +11,7 @@ import (
 )
 
 type AuthUseCase interface {
-	Login(payload dto.AuthRequest) (dto.AuthResponse, error)
+	Login(payload dto.AuthRequest, ctx *gin.Context) (dto.AuthResponse, error)
 	LogActivity(activity entity.Activities) error
 }
 
@@ -30,12 +31,12 @@ func (a *authUseCase) LogActivity(activity entity.Activities) error {
 	return nil
 }
 
-func (a *authUseCase) Login(payload dto.AuthRequest) (dto.AuthResponse, error) {
+func (a *authUseCase) Login(payload dto.AuthRequest, ctx *gin.Context) (dto.AuthResponse, error) {
 	customer, err := a.customerUC.AuthCustomer(payload.Email, payload.HashPassword)
 	if err != nil {
 		return dto.AuthResponse{}, err
 	}
-	token, err := a.jwtService.CreateToken(customer)
+	token, err := a.jwtService.CreateToken(customer, ctx)
 	if err != nil {
 		return dto.AuthResponse{}, err
 	}

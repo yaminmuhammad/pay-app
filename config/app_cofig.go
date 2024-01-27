@@ -5,4 +5,6 @@ const (
 
 	MasterCustomerGetById  = "/master/customers/:id"
 	MasterCustomerRegister = "/master/customers"
+
+	MasterMerchantRegister = "/master/merchants"
 )

@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
 	"github.com/yaminmuhammad/pay-app/config"
@@ -17,6 +19,7 @@ import (
 
 type Server struct {
 	customerUC usecase.CustomerUseCase
+	merchantUC usecase.MerchantUseCase
 	authUC     usecase.AuthUseCase
 	jwtService service.JwtService
 	engine     *gin.Engine
@@ -29,6 +32,7 @@ func (s *Server) initRoute() {
 	authMiddleware := middleware.NewAuthMiddleware(s.jwtService)
 	controller.NewAuthController(s.authUC, rg).Route()
 	controller.NewCustomerController(s.customerUC, rg, authMiddleware).Route()
+	controller.NewMerchantController(s.merchantUC, rg, authMiddleware).Route()
 }
 
 func (s *Server) Run() {
@@ -47,14 +51,23 @@ func NewServer() *Server {
 	}
 
 	customerRepo := repository.NewCustomerRepo(db)
+	merchantRepo := repository.NewMerchantRepo(db)
+
 	jwtService := service.NewJwtService(config.TokenConfig)
+
 	customerUC := usecase.NewCustomerUseCase(customerRepo)
+	merchantUC := usecase.NewMerchantUseCase(merchantRepo)
+
 	authUC := usecase.NewAuthUseCase(customerUC, jwtService, customerRepo)
 
 	engine := gin.Default()
+	store := cookie.NewStore([]byte("secret!!!"))
+	engine.Use(sessions.Sessions("customerId", store))
+
 	port := fmt.Sprintf(":%s", config.ApiPort)
 	return &Server{
 		customerUC,
+		merchantUC,
 		authUC,
 		jwtService,
 		engine,

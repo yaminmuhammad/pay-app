@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/yaminmuhammad/pay-app/config"
 	"github.com/yaminmuhammad/pay-app/dto"
@@ -12,7 +14,7 @@ import (
 )
 
 type JwtService interface {
-	CreateToken(customer entity.Customer) (dto.AuthResponse, error)
+	CreateToken(customer entity.Customer, ctx *gin.Context) (dto.AuthResponse, error)
 	ParseToken(tokenHeader string) (jwt.MapClaims, error)
 	// SaveCustomerSession(ctx *gin.Context, claims jwt.MapClaims)
 }
@@ -28,7 +30,7 @@ type jwtService struct {
 // 	session.Save()
 // }
 
-func (j *jwtService) CreateToken(customer entity.Customer) (dto.AuthResponse, error) {
+func (j *jwtService) CreateToken(customer entity.Customer, ctx *gin.Context) (dto.AuthResponse, error) {
 	claims := model.CustomClaims{
 		RegisteredClaims: jwt.RegisteredClaims{
 			Issuer:    j.config.IssuerName,
@@ -38,9 +40,9 @@ func (j *jwtService) CreateToken(customer entity.Customer) (dto.AuthResponse, er
 		CustomerId: customer.Id,
 	}
 
-	// session := sessions.Default(ctx)
-	// session.Set("customerId", claims.CustomerId)
-	// session.Save()
+	session := sessions.Default(ctx)
+	session.Set("customerId", claims.CustomerId)
+	session.Save()
 
 	token := jwt.NewWithClaims(j.config.JwtSigningMethod, claims)
 	ss, err := token.SignedString(j.config.JwtSignatureKey)
