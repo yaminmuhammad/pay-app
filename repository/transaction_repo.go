@@ -55,6 +55,15 @@ func (t *transactionRepo) Create(data entity.Transactions) (entity.Transactions,
 	transaction.Code = data.Code
 	transaction.TransactionTime = time.Now()
 
+	_, err = tx.Exec(config.InsertActivity,
+		data.CustomerId,
+		"Payment",
+		time.Now(),
+	)
+	if err != nil {
+		return entity.Transactions{}, err
+	}
+
 	return transaction, nil
 }
 
